@@ -1,10 +1,9 @@
 # pomodoro_flutter
 
-A new Flutter project.
+Aplicativo de cronômetro Pomodoro que inicia um cronômetro de 25 minutos e exibe o tempo restante em minutos e segundos. O usuário pode iniciar e parar o cronômetro usando os botões correspondentes. 
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
 
