@@ -1,17 +1,20 @@
 import 'dart:async' show Timer;
+import 'dart:math' hide max;
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 // Checking
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: MyHomePage(),
     );
@@ -19,7 +22,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _MyHomePageState createState() => _MyHomePageState();
 }
 
@@ -27,9 +33,9 @@ class _MyHomePageState extends State<MyHomePage> {
   int _seconds = 00;
   int _minutes = 25;
   Timer? _timer;
-  var f = NumberFormat("00");
+  var min = NumberFormat("00");
 
-  void _stopTimer() {
+  void _restartTimer() {
     if (_timer != null) {
       _timer?.cancel();
       _seconds = 0;
@@ -37,9 +43,17 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void _stopTimer() {
+    if (_timer != null) {
+      _timer?.cancel();
+      _seconds = false as int;
+      _minutes = 25;
+    }
+  }
+
   void _startTimer() {
     if (_timer != null) {
-      _stopTimer();
+      _restartTimer();
     }
     if (_minutes > 0) {
       _seconds = _minutes * 60;
@@ -48,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _minutes = (_seconds / 60).floor();
       _seconds -= (_minutes * 60);
     }
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (_seconds > 0) {
           _seconds--;
@@ -58,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
             _minutes--;
           } else {
             _timer?.cancel();
-            print("Timer Complete");
+            debugPrint("Timer Complete");
           }
         }
       });
@@ -68,7 +82,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 239, 137, 65),
+          title: const Text(
+            'Pomodoro',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          )),
+      backgroundColor: const Color.fromARGB(121, 242, 189, 151),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -78,20 +100,38 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${f.format(_minutes)} : ${f.format(_seconds)}",
-                style: TextStyle(
-                  color: Colors.white,
+                "${min.format(_minutes)} : ${min.format(_seconds)}",
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 255, 254, 253),
                   fontSize: 48,
                 ),
               ),
             ],
           ),
-          SizedBox(
-            height: 300,
+          const SizedBox(
+            height: 100,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              ElevatedButton(
+                onPressed: () {
+                  _startTimer();
+                },
+                style: TextButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 251, 251, 251),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text(
+                    "Start",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 255, 106, 0),
+                      fontSize: 17,
+                    ),
+                  ),
+                ),
+              ),
               ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -99,37 +139,35 @@ class _MyHomePageState extends State<MyHomePage> {
                   });
                 },
                 style: TextButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  shape: const CircleBorder(
-                      side: BorderSide(color: Colors.orange)),
+                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                 ),
                 child: const Padding(
-                  padding: EdgeInsets.all(40.0),
+                  padding: EdgeInsets.all(10.0),
                   child: Text(
-                    "Stop",
+                    "Pause",
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
+                      color: Color.fromARGB(255, 255, 106, 0),
+                      fontSize: 17,
                     ),
                   ),
                 ),
               ),
               ElevatedButton(
                 onPressed: () {
-                  _startTimer();
+                  setState(() {
+                    _restartTimer();
+                  });
                 },
                 style: TextButton.styleFrom(
-                  backgroundColor: Colors.orange,
-                  shape: const CircleBorder(
-                      side: BorderSide(color: Colors.orange)),
+                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                 ),
                 child: const Padding(
-                  padding: EdgeInsets.all(40.0),
+                  padding: EdgeInsets.all(10.0),
                   child: Text(
-                    "Start",
+                    "Restart",
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
+                      color: Color.fromARGB(255, 255, 106, 0),
+                      fontSize: 17,
                     ),
                   ),
                 ),
